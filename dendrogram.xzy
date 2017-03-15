@@ -1,0 +1,122 @@
+zmnsem/                                             // 项目目录
+│
+├── node_modules/                                   // Nodejs 项目依赖文件
+│
+├── package.json                                    // Nodejs 项目配置文件
+│
+├── gulpfile.js                                     // Gulp 工作流配置文件
+│
+├── src/                                            // 源文件目录
+│   ├── pc/                                         // PC 端页面
+│   │   ├── static/                                 // 资源文件夹
+│   │   │   ├── common/                             // 公共文件和公共模板
+│   │   │   │   ├── images/
+│   │   │   │   ├── header_liuxue.html
+│   │   │   │   ├── footer_liuxue.html
+│   │   │   │   ├── code_liuxue.html
+│   │   │   │   ├── common_liuxue.css
+│   │   │   │   ├── common_liuxue.js
+│   │   │   │   └── ...
+│   │   │   │
+│   │   │   └── lib/                                // 第三方库
+│   │   │       ├── jquery/
+│   │   │       ├── swiper/
+│   │   │       └── ...
+│   │   │
+│   │   ├── page01/                                 // 独立页面目录
+│   │   │   ├── images/
+│   │   │   ├── page01.css
+│   │   │   └── page01.html
+│   │   │
+│   │   ├── page02/
+│   │   │   ├── images/
+│   │   │   ├── page02.css
+│   │   │   └── page02.html
+│   │   │
+│   │   └── ...
+│   │
+│   │
+│   └── mb/                                         // 移动端页面，移动端目录结构同 PC 端相同
+│       ├── static/
+│       │   ├── common/                             // 公共文件和公共模板
+│       │   │   ├── images/
+│       │   │   ├── header_liuxue.html
+│       │   │   ├── footer_liuxue.html
+│       │   │   ├── code_liuxue.html
+│       │   │   ├── common_liuxue.css
+│       │   │   ├── common_liuxue.js
+│       │   │   └── ...
+│       │   │
+│       │   └── lib/                                // 第三方库
+│       │       ├── jquery/
+│       │       ├── swiper/
+│       │       └── ...
+│       │
+│       ├── page01/
+│       │   ├── images/
+│       │   ├── page01.css
+│       │   └── index.html
+│       │
+│       ├── page02/
+│       │   ├── images/
+│       │   ├── page02.css
+│       │   └── index.html
+│       │
+│       └── ...
+│
+├── dev/                                            // 开发目录，由 `gulp build_dev` 任务生成
+│
+└── dist/                                           // 生产目录，由 `gulp build_dist` 任务生成
+    ├── pc/
+    │   ├── static/
+    │   │   ├── common/
+    │   │   │   ├── images/
+    │   │   │   ├── common-lib.min.js
+    │   │   │   ├── common_liuxue.js
+    │   │   │   └── ...
+    │   │   │
+    │   │   ├── page01/
+    │   │   │   ├── images/
+    │   │   │   └── page01.css
+    │   │   │
+    │   │   └── page02/
+    │   │       ├── images/
+    │   │       └── page02.css
+    │   │
+    │   ├── page01/
+    │   │   └── index.html
+    │   │
+    │   ├── page02/
+    │   │   └── index.html
+    │   │
+    │   └── ...
+    │
+    │
+    └── mb/
+        ├── static/
+        │   ├── common/
+        │   │   ├── images/
+        │   │   ├── common-lib.min.js
+        │   │   ├── common_lx.js
+        │   │   └── ...
+        │   │
+        │   ├── page01/
+        │   │   ├── images/
+        │   │   └── page01.css
+        │   │
+        │   └── page02/
+        │       ├── images/
+        │       └── page02.css
+        │
+        ├── page01/
+        │   └── index.html
+        │
+        ├── page02/
+        │   └── index.html
+        │
+        └── ...
+
+
+
+
+

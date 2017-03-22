@@ -25,13 +25,15 @@ zmnsem/                                             // 项目目录
 │   │   │
 │   │   ├── page01/                                 // 独立页面目录
 │   │   │   ├── images/
+│   │   │   ├── page01.js
 │   │   │   ├── page01.css
-│   │   │   └── page01.html
+│   │   │   └── index.html
 │   │   │
 │   │   ├── page02/
 │   │   │   ├── images/
+│   │   │   ├── page02.js
 │   │   │   ├── page02.css
-│   │   │   └── page02.html
+│   │   │   └── index.html
 │   │   │
 │   │   └── ...
 │   │
@@ -54,11 +56,13 @@ zmnsem/                                             // 项目目录
 │       │
 │       ├── page01/
 │       │   ├── images/
+│       │   ├── page01.js
 │       │   ├── page01.css
 │       │   └── index.html
 │       │
 │       ├── page02/
 │       │   ├── images/
+│       │   ├── page02.js
 │       │   ├── page02.css
 │       │   └── index.html
 │       │
@@ -77,10 +81,12 @@ zmnsem/                                             // 项目目录
     │   │   │
     │   │   ├── page01/
     │   │   │   ├── images/
+    │   │   │   ├── page01.js
     │   │   │   └── page01.css
     │   │   │
     │   │   └── page02/
     │   │       ├── images/
+    │   │       ├── page02.js
     │   │       └── page02.css
     │   │
     │   ├── page01/
@@ -102,10 +108,12 @@ zmnsem/                                             // 项目目录
         │   │
         │   ├── page01/
         │   │   ├── images/
+        │   │   ├── page01.js
         │   │   └── page01.css
         │   │
         │   └── page02/
         │       ├── images/
+        │       ├── page02.js
         │       └── page02.css
         │
         ├── page01/
@@ -115,6 +123,9 @@ zmnsem/                                             // 项目目录
         │   └── index.html
         │
         └── ...
+
+
+
 
 
 

@@ -109,20 +109,20 @@ gulp.task('upload_html', ['minify_html'], function() {
                 gulp.src(outPagePath)
                     .pipe(replace(/clicked\'\,\'([^_]*)/g, "clicked" + "','" + pcPath[0][i]))
                     .pipe(replace(/clicked\"\,\"([^_]*)/g, 'clicked' + '","' + pcPath[0][i]))
-                    .pipe(replace(/http\:\/\/([^\/]+)/g, pcPath[1][i]))
+                    .pipe(replace(/href=\"http\:\/\/([^\/]+)/g, 'href="' + pcPath[1][i]))
                     .pipe(gulpSsh.dest('/sem/' + pcPath[0][i] + '/ks/' + dir));
             }
             gulp.src(outPagePath)
                 .pipe(replace(/clicked\'\,\'([^_]*)/g, "clicked" + "','" + pcPath[0][i]))
                 .pipe(replace(/clicked\"\,\"([^_]*)/g, 'clicked' + '","' + pcPath[0][i]))
-                .pipe(replace(/http\:\/\/([^\/]+)/g, pcPath[1][5]))
+                .pipe(replace(/href=\"http\:\/\/([^\/]+)/g, 'href="' + pcPath[1][5]))
                 .pipe(gulpSsh.dest('/sem/' + pcPath[0][5] + '/' + dir));
         } else {
             for(var i = 0, len = pcPath[0].length - 1; i < len; i++) {
                 gulp.src(outPagePath)
                     .pipe(replace(/clicked\'\,\'([^_]*)/g, "clicked" + "','" + pcPath[0][i]))
                     .pipe(replace(/clicked\"\,\"([^_]*)/g, 'clicked' + '","' + pcPath[0][i]))
-                    .pipe(replace(/http\:\/\/([^\/]+)/g, pcPath[1][i]))
+                    .pipe(replace(/href=\"http\:\/\/([^\/]+)/g, 'href="' + pcPath[1][i]))
                     .pipe(gulpSsh.dest('/sem/' + pcPath[0][i] + '/' + dir));
             }
         }
@@ -132,32 +132,32 @@ gulp.task('upload_html', ['minify_html'], function() {
                 gulp.src(outPagePath)
                     // .pipe(replace(/clicked\'\,\'([^_]*)/g, "clicked" + "','" + mbPath[0][i]))
                     // .pipe(replace(/clicked\"\,\"([^_]*)/g, 'clicked' + '","' + mbPath[0][i]))
-                    .pipe(replace(/http\:\/\/([^\/]+)/g, mbPath[1][i]))
+                    .pipe(replace(/href=\"http\:\/\/([^\/]+)/g, 'href="' + mbPath[1][i]))
                     .pipe(gulpSsh.dest('/sem/' + mbPath[0][i] + '/ks/' + dir));
             }
             gulp.src(outPagePath)
                 // .pipe(replace(/clicked\'\,\'([^_]*)/g, "clicked" + "','" + mbPath[0][i]))
                 // .pipe(replace(/clicked\"\,\"([^_]*)/g, 'clicked' + '","' + mbPath[0][i]))
-                .pipe(replace(/http\:\/\/([^\/]+)/g, mbPath[1][5]))
+                .pipe(replace(/href=\"http\:\/\/([^\/]+)/g, 'href="' + mbPath[1][5]))
                 .pipe(gulpSsh.dest('/sem/' + mbPath[0][5] + '/' + dir));
         } else if(subdir == "tt" || subdir == "tx") {
             gulp.src(outPagePath)
                 // .pipe(replace(/clicked\'\,\'([^_]*)/g, "clicked" + "','" + mbPath[0][i]))
                 // .pipe(replace(/clicked\"\,\"([^_]*)/g, 'clicked' + '","' + mbPath[0][i]))
-                .pipe(replace(/http\:\/\/([^\/]+)/g, mbPath[1][0]))
+                .pipe(replace(/href=\"http\:\/\/([^\/]+)/g, 'href="' + mbPath[1][0]))
                 .pipe(gulpSsh.dest('/sem/' + mbPath[0][0] + '/tx/' + dir));
         } else if(subdir == "bd") {
             gulp.src(outPagePath)
                 // .pipe(replace(/clicked\'\,\'([^_]*)/g, "clicked" + "','" + mbPath[0][i]))
                 // .pipe(replace(/clicked\"\,\"([^_]*)/g, 'clicked' + '","' + mbPath[0][i]))
-                .pipe(replace(/http\:\/\/([^\/]+)/g, mbPath[1][0]))
+                .pipe(replace(/href=\"http\:\/\/([^\/]+)/g, 'href="' + mbPath[1][0]))
                 .pipe(gulpSsh.dest('/sem/' + mbPath[0][0] + '/bdtt/' + dir));
         } else {
             for(var i = 0, len = mbPath[0].length - 1; i < len; i++) {
                 gulp.src(outPagePath)
                     // .pipe(replace(/clicked\'\,\'([^_]*)/g, "clicked" + "','" + mbPath[0][i]))
                     // .pipe(replace(/clicked\"\,\"([^_]*)/g, 'clicked' + '","' + mbPath[0][i]))
-                    .pipe(replace(/http\:\/\/([^\/]+)/g, mbPath[1][i]))
+                    .pipe(replace(/href=\"http\:\/\/([^\/]+)/g, 'href="' + mbPath[1][i]))
                     .pipe(gulpSsh.dest('/sem/' + mbPath[0][i] + '/' + dir));
             }
         }

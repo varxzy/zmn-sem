@@ -145,11 +145,6 @@ gulp.task('upload_html', ['minify_html'], function() {
                 // .pipe(replace(/clicked\'\,\'([^_]*)/g, "clicked" + "','" + mbPath[0][i]))
                 // .pipe(replace(/clicked\"\,\"([^_]*)/g, 'clicked' + '","' + mbPath[0][i]))
                 .pipe(replace(/http\:\/\/([^\/]+)/g, mbPath[1][0]))
-                .pipe(gulpSsh.dest('/sem/' + mbPath[0][0] + '/tt/' + dir)),
-            gulp.src(outPagePath)
-                // .pipe(replace(/clicked\'\,\'([^_]*)/g, "clicked" + "','" + mbPath[0][i]))
-                // .pipe(replace(/clicked\"\,\"([^_]*)/g, 'clicked' + '","' + mbPath[0][i]))
-                .pipe(replace(/http\:\/\/([^\/]+)/g, mbPath[1][0]))
                 .pipe(gulpSsh.dest('/sem/' + mbPath[0][0] + '/tx/' + dir));
         } else {
             for(var i = 0, len = mbPath[0].length - 1; i < len; i++) {
@@ -190,8 +185,6 @@ gulp.task('upload_css', ['minify_css'], function() {
                 .pipe(gulpSsh.dest('/sem/' + mbPath[0][5] + '/static/' + dir));
         } else if(subdir == "tt" || subdir == "tx") {
             gulp.src(outImgPath)
-                .pipe(gulpSsh.dest('/sem/' + mbPath[0][0] + '/static/' + dir)),
-            gulp.src(outImgPath)
                 .pipe(gulpSsh.dest('/sem/' + mbPath[0][0] + '/static/' + dir));
         } else {
             for(var i = 0, len = mbPath[0].length - 1; i < len; i++) {
@@ -229,8 +222,6 @@ gulp.task('upload_js', function() {
                 .pipe(gulpSsh.dest('/sem/' + mbPath[0][5] + '/static/' + dir));
         } else if(subdir == "tt" || subdir == "tx") {
             gulp.src(outImgPath)
-                .pipe(gulpSsh.dest('/sem/' + mbPath[0][0] + '/static/' + dir)),
-            gulp.src(outImgPath)
                 .pipe(gulpSsh.dest('/sem/' + mbPath[0][0] + '/static/' + dir));
         } else {
             for(var i = 0, len = mbPath[0].length - 1; i < len; i++) {
@@ -267,8 +258,6 @@ gulp.task('upload_img', ['minify_img'], function() {
             gulp.src(outImgPath)
                 .pipe(gulpSsh.dest('/sem/' + mbPath[0][5] + '/static/' + dir + '/images'));
         } else if(subdir == "tt" || subdir == "tx") {
-            gulp.src(outImgPath)
-                .pipe(gulpSsh.dest('/sem/' + mbPath[0][0] + '/static/' + dir + '/images')),
             gulp.src(outImgPath)
                 .pipe(gulpSsh.dest('/sem/' + mbPath[0][0] + '/static/' + dir + '/images'));
         } else {

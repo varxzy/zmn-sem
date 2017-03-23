@@ -15,7 +15,7 @@ var gulp = require('gulp'),                                     // 本地安装 
     config = require('./config.sftp.js'),                       // sftp 配置文件
     newDate = new Date();                                       // 时间戳
 
-// 命令行参数：gulp [任务名] --dir=[页面目录] --type=[pc/mb] --subdir=[ks/tt|tx]
+// 命令行参数：gulp [任务名] --dir=[页面目录] --type=[pc/mb] --subdir=[ks/tt|tx/tt]
 var dir = argv.dir || "test",
     type = argv.type || "pc",
     subdir = argv.subdir || false,
@@ -146,6 +146,12 @@ gulp.task('upload_html', ['minify_html'], function() {
                 // .pipe(replace(/clicked\"\,\"([^_]*)/g, 'clicked' + '","' + mbPath[0][i]))
                 .pipe(replace(/http\:\/\/([^\/]+)/g, mbPath[1][0]))
                 .pipe(gulpSsh.dest('/sem/' + mbPath[0][0] + '/tx/' + dir));
+        } else if(subdir == "bd") {
+            gulp.src(outPagePath)
+                // .pipe(replace(/clicked\'\,\'([^_]*)/g, "clicked" + "','" + mbPath[0][i]))
+                // .pipe(replace(/clicked\"\,\"([^_]*)/g, 'clicked' + '","' + mbPath[0][i]))
+                .pipe(replace(/http\:\/\/([^\/]+)/g, mbPath[1][0]))
+                .pipe(gulpSsh.dest('/sem/' + mbPath[0][0] + '/bdtt/' + dir));
         } else {
             for(var i = 0, len = mbPath[0].length - 1; i < len; i++) {
                 gulp.src(outPagePath)
@@ -183,7 +189,7 @@ gulp.task('upload_css', ['minify_css'], function() {
             }
             gulp.src(outImgPath)
                 .pipe(gulpSsh.dest('/sem/' + mbPath[0][5] + '/static/' + dir));
-        } else if(subdir == "tt" || subdir == "tx") {
+        } else if(subdir == "tt" || subdir == "tx" || subdir == "bd") {
             gulp.src(outImgPath)
                 .pipe(gulpSsh.dest('/sem/' + mbPath[0][0] + '/static/' + dir));
         } else {
@@ -220,7 +226,7 @@ gulp.task('upload_js', function() {
             }
             gulp.src(outImgPath)
                 .pipe(gulpSsh.dest('/sem/' + mbPath[0][5] + '/static/' + dir));
-        } else if(subdir == "tt" || subdir == "tx") {
+        } else if(subdir == "tt" || subdir == "tx" || subdir == "bd") {
             gulp.src(outImgPath)
                 .pipe(gulpSsh.dest('/sem/' + mbPath[0][0] + '/static/' + dir));
         } else {
@@ -257,7 +263,7 @@ gulp.task('upload_img', ['minify_img'], function() {
             }
             gulp.src(outImgPath)
                 .pipe(gulpSsh.dest('/sem/' + mbPath[0][5] + '/static/' + dir + '/images'));
-        } else if(subdir == "tt" || subdir == "tx") {
+        } else if(subdir == "tt" || subdir == "tx" || subdir == "bd") {
             gulp.src(outImgPath)
                 .pipe(gulpSsh.dest('/sem/' + mbPath[0][0] + '/static/' + dir + '/images'));
         } else {

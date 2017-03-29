@@ -113,8 +113,8 @@ gulp.task('upload_html', ['minify_html'], function() {
                     .pipe(gulpSsh.dest('/sem/' + pcPath[0][i] + '/ks/' + dir));
             }
             gulp.src(outPagePath)
-                .pipe(replace(/clicked\'\,\'([^_]*)/g, "clicked" + "','" + pcPath[0][i]))
-                .pipe(replace(/clicked\"\,\"([^_]*)/g, 'clicked' + '","' + pcPath[0][i]))
+                .pipe(replace(/clicked\'\,\'([^_]*)/g, "clicked" + "','" + pcPath[0][5]))
+                .pipe(replace(/clicked\"\,\"([^_]*)/g, 'clicked' + '","' + pcPath[0][5]))
                 .pipe(replace(/href=\"http\:\/\/([^\/]+)/g, 'href="' + pcPath[1][5]))
                 .pipe(gulpSsh.dest('/sem/' + pcPath[0][5] + '/' + dir));
         } else {
@@ -136,20 +136,20 @@ gulp.task('upload_html', ['minify_html'], function() {
                     .pipe(gulpSsh.dest('/sem/' + mbPath[0][i] + '/ks/' + dir));
             }
             gulp.src(outPagePath)
-                // .pipe(replace(/clicked\'\,\'([^_]*)/g, "clicked" + "','" + mbPath[0][i]))
-                // .pipe(replace(/clicked\"\,\"([^_]*)/g, 'clicked' + '","' + mbPath[0][i]))
+                // .pipe(replace(/clicked\'\,\'([^_]*)/g, "clicked" + "','" + mbPath[0][5]))
+                // .pipe(replace(/clicked\"\,\"([^_]*)/g, 'clicked' + '","' + mbPath[0][5]))
                 .pipe(replace(/href=\"http\:\/\/([^\/]+)/g, 'href="' + mbPath[1][5]))
                 .pipe(gulpSsh.dest('/sem/' + mbPath[0][5] + '/' + dir));
         } else if(subdir == "tt" || subdir == "tx") {
             gulp.src(outPagePath)
-                // .pipe(replace(/clicked\'\,\'([^_]*)/g, "clicked" + "','" + mbPath[0][i]))
-                // .pipe(replace(/clicked\"\,\"([^_]*)/g, 'clicked' + '","' + mbPath[0][i]))
+                // .pipe(replace(/clicked\'\,\'([^_]*)/g, "clicked" + "','" + mbPath[0][0]))
+                // .pipe(replace(/clicked\"\,\"([^_]*)/g, 'clicked' + '","' + mbPath[0][0]))
                 .pipe(replace(/href=\"http\:\/\/([^\/]+)/g, 'href="' + mbPath[1][0]))
                 .pipe(gulpSsh.dest('/sem/' + mbPath[0][0] + '/tx/' + dir));
         } else if(subdir == "bd") {
             gulp.src(outPagePath)
-                // .pipe(replace(/clicked\'\,\'([^_]*)/g, "clicked" + "','" + mbPath[0][i]))
-                // .pipe(replace(/clicked\"\,\"([^_]*)/g, 'clicked' + '","' + mbPath[0][i]))
+                // .pipe(replace(/clicked\'\,\'([^_]*)/g, "clicked" + "','" + mbPath[0][0]))
+                // .pipe(replace(/clicked\"\,\"([^_]*)/g, 'clicked' + '","' + mbPath[0][0]))
                 .pipe(replace(/href=\"http\:\/\/([^\/]+)/g, 'href="' + mbPath[1][0]))
                 .pipe(gulpSsh.dest('/sem/' + mbPath[0][0] + '/bdtt/' + dir));
         } else {

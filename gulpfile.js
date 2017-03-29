@@ -15,12 +15,12 @@ var gulp = require('gulp'),                                     // 本地安装 
     config = require('./config.sftp.js'),                       // sftp 配置文件
     newDate = new Date();                                       // 时间戳
 
-// 命令行参数：gulp [任务名] --dir=[页面目录] --type=[pc/mb] --subdir=[ks/tt|tx/tt]
+// 命令行参数：gulp [任务名] --dir=[页面目录] --type=[pc/mb] --subdir=[ks/tt|tx/bd]
 var dir = argv.dir || "test",
     type = argv.type || "pc",
     subdir = argv.subdir || false,
-    pcPath = [["liuxue", "eduuii", "lxwedu", "qcwxx", "nmmedu", "kaoshi"], ["http://liuxue.zmnedu.com", "http://zmn.eduuii.com", "http://zmn.lxwedu.com.cn", "http://zmn.qcwxx.cn", "http://zmn.nmmedu.com", "http://kaoshi.zmnedu.com"]],
-    mbPath = [["lx", "m_eduuii", "m_lxwedu", "m_qcwxx", "m_nmmedu", "ks"], ["http://lx.zmnedu.com", "http://zmnedu.eduuii.com", "http://zmnedu.lxwedu.com.cn", "http://zmnedu.qcwxx.cn", "http://zmnedu.nmmedu.com", "http://ks.zmnedu.com"]];
+    pcPath = [["liuxue", "eduuii", "lxwedu", "qcwxx", "nmmedu", "kaoshi"], ["http://liuxue.zmnedu.com", "http://zmn.eduuii.com", "http://zmn.lxwedu.com.cn", "http://zmn.qcwxx.cn", "http://zmn.nmmedu.com", "http://kaoshi.zmnedu.com"], ["400-888-5185", "400-858-0855", "400-858-0855", "400-858-0855", "400-858-0855", "400-888-5185"], ["4008885185", "4008580855", "4008580855", "4008580855", "4008580855", "4008885185"]],
+    mbPath = [["lx", "m_eduuii", "m_lxwedu", "m_qcwxx", "m_nmmedu", "ks"], ["http://lx.zmnedu.com", "http://zmnedu.eduuii.com", "http://zmnedu.lxwedu.com.cn", "http://zmnedu.qcwxx.cn", "http://zmnedu.nmmedu.com", "http://ks.zmnedu.com"], ["400-888-5185", "400-858-0855", "400-858-0855", "400-858-0855", "400-858-0855", "400-888-5185"], ["4008885185", "4008580855", "4008580855", "4008580855", "4008580855", "4008885185"]];
 
 var gulpSsh = new ssh({
     ignoreErrors: true,
@@ -110,12 +110,14 @@ gulp.task('upload_html', ['minify_html'], function() {
                     .pipe(replace(/clicked\'\,\'([^_]*)/g, "clicked" + "','" + pcPath[0][i]))
                     .pipe(replace(/clicked\"\,\"([^_]*)/g, 'clicked' + '","' + pcPath[0][i]))
                     .pipe(replace(/href=\"http\:\/\/([^\/]+)/g, 'href="' + pcPath[1][i]))
+                    .pipe(replace('400-888-5185', pcPath[2][i]))
                     .pipe(gulpSsh.dest('/sem/' + pcPath[0][i] + '/ks/' + dir));
             }
             gulp.src(outPagePath)
                 .pipe(replace(/clicked\'\,\'([^_]*)/g, "clicked" + "','" + pcPath[0][5]))
                 .pipe(replace(/clicked\"\,\"([^_]*)/g, 'clicked' + '","' + pcPath[0][5]))
                 .pipe(replace(/href=\"http\:\/\/([^\/]+)/g, 'href="' + pcPath[1][5]))
+                .pipe(replace('400-888-5185', pcPath[2][5]))
                 .pipe(gulpSsh.dest('/sem/' + pcPath[0][5] + '/' + dir));
         } else {
             for(var i = 0, len = pcPath[0].length - 1; i < len; i++) {
@@ -123,6 +125,7 @@ gulp.task('upload_html', ['minify_html'], function() {
                     .pipe(replace(/clicked\'\,\'([^_]*)/g, "clicked" + "','" + pcPath[0][i]))
                     .pipe(replace(/clicked\"\,\"([^_]*)/g, 'clicked' + '","' + pcPath[0][i]))
                     .pipe(replace(/href=\"http\:\/\/([^\/]+)/g, 'href="' + pcPath[1][i]))
+                    .pipe(replace('400-888-5185', pcPath[2][i]))
                     .pipe(gulpSsh.dest('/sem/' + pcPath[0][i] + '/' + dir));
             }
         }
@@ -133,24 +136,39 @@ gulp.task('upload_html', ['minify_html'], function() {
                     // .pipe(replace(/clicked\'\,\'([^_]*)/g, "clicked" + "','" + mbPath[0][i]))
                     // .pipe(replace(/clicked\"\,\"([^_]*)/g, 'clicked' + '","' + mbPath[0][i]))
                     .pipe(replace(/href=\"http\:\/\/([^\/]+)/g, 'href="' + mbPath[1][i]))
+                    .pipe(replace('400-888-5185', mbPath[2][i]))
+                    .pipe(replace('4008885185', mbPath[3][i]))
                     .pipe(gulpSsh.dest('/sem/' + mbPath[0][i] + '/ks/' + dir));
             }
             gulp.src(outPagePath)
                 // .pipe(replace(/clicked\'\,\'([^_]*)/g, "clicked" + "','" + mbPath[0][5]))
                 // .pipe(replace(/clicked\"\,\"([^_]*)/g, 'clicked' + '","' + mbPath[0][5]))
                 .pipe(replace(/href=\"http\:\/\/([^\/]+)/g, 'href="' + mbPath[1][5]))
+                .pipe(replace('400-888-5185', mbPath[2][5]))
+                .pipe(replace('4008885185', mbPath[3][5]))
                 .pipe(gulpSsh.dest('/sem/' + mbPath[0][5] + '/' + dir));
         } else if(subdir == "tt" || subdir == "tx") {
             gulp.src(outPagePath)
                 // .pipe(replace(/clicked\'\,\'([^_]*)/g, "clicked" + "','" + mbPath[0][0]))
                 // .pipe(replace(/clicked\"\,\"([^_]*)/g, 'clicked' + '","' + mbPath[0][0]))
                 .pipe(replace(/href=\"http\:\/\/([^\/]+)/g, 'href="' + mbPath[1][0]))
+                .pipe(replace('400-888-5185', mbPath[2][0]))
+                .pipe(replace('4008885185', mbPath[3][0]))
+                .pipe(gulpSsh.dest('/sem/' + mbPath[0][0] + '/tt/' + dir)),
+            gulp.src(outPagePath)
+                // .pipe(replace(/clicked\'\,\'([^_]*)/g, "clicked" + "','" + mbPath[0][0]))
+                // .pipe(replace(/clicked\"\,\"([^_]*)/g, 'clicked' + '","' + mbPath[0][0]))
+                .pipe(replace(/href=\"http\:\/\/([^\/]+)/g, 'href="' + mbPath[1][0]))
+                .pipe(replace('400-888-5185', mbPath[2][0]))
+                .pipe(replace('4008885185', mbPath[3][0]))
                 .pipe(gulpSsh.dest('/sem/' + mbPath[0][0] + '/tx/' + dir));
         } else if(subdir == "bd") {
             gulp.src(outPagePath)
                 // .pipe(replace(/clicked\'\,\'([^_]*)/g, "clicked" + "','" + mbPath[0][0]))
                 // .pipe(replace(/clicked\"\,\"([^_]*)/g, 'clicked' + '","' + mbPath[0][0]))
                 .pipe(replace(/href=\"http\:\/\/([^\/]+)/g, 'href="' + mbPath[1][0]))
+                .pipe(replace('400-888-5185', mbPath[2][0]))
+                .pipe(replace('4008885185', mbPath[3][0]))
                 .pipe(gulpSsh.dest('/sem/' + mbPath[0][0] + '/bdtt/' + dir));
         } else {
             for(var i = 0, len = mbPath[0].length - 1; i < len; i++) {
@@ -158,6 +176,8 @@ gulp.task('upload_html', ['minify_html'], function() {
                     // .pipe(replace(/clicked\'\,\'([^_]*)/g, "clicked" + "','" + mbPath[0][i]))
                     // .pipe(replace(/clicked\"\,\"([^_]*)/g, 'clicked' + '","' + mbPath[0][i]))
                     .pipe(replace(/href=\"http\:\/\/([^\/]+)/g, 'href="' + mbPath[1][i]))
+                    .pipe(replace('400-888-5185', mbPath[2][i]))
+                    .pipe(replace('4008885185', mbPath[3][i]))
                     .pipe(gulpSsh.dest('/sem/' + mbPath[0][i] + '/' + dir));
             }
         }
@@ -285,7 +305,10 @@ gulp.task('clean_dist', function() {
 
 // 上传源文件
 gulp.task('upload_dev', function() {
+    if(subdir) {
+        subdir = subdir + '_'
+    }
     var devPath = 'src/' + type + '/' + dir + '/**';
     gulp.src(devPath)
-        .pipe(gulpSsh.dest('/sem/sem_test/dev/' + type + '/' + dir + newDate.format("yyyyMMdd")));
+        .pipe(gulpSsh.dest('/sem/sem_test/dev/' + type + '/' + subdir + dir + newDate.format("yyyyMMdd")));
 });

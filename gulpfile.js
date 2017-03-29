@@ -306,7 +306,9 @@ gulp.task('clean_dist', function() {
 // 上传源文件
 gulp.task('upload_dev', function() {
     if(subdir) {
-        subdir = subdir + '_'
+        subdir = subdir + '_';
+    } else {
+        subdir = "";
     }
     var devPath = 'src/' + type + '/' + dir + '/**';
     gulp.src(devPath)

@@ -6,13 +6,15 @@ var gulp = require('gulp'),                                     // 本地安装 
     imagemin = require('gulp-imagemin'),                        // 图片压缩
     rename = require('gulp-rename'),                            // 文件重命名
     concat = require('gulp-concat'),                            // 文件合并
-    ssh = require('gulp-ssh'),                                  // 文件上传
+    ssh = require('gulp-ssh'),                                  // ssh 文件上传
     argv = require('yargs').argv,                               // 接受命令行参数
     replace = require('gulp-replace'),                          // 替换字符串
     usemin = require('gulp-usemin'),                            // 文件压缩合并
     contentInclude = require('gulp-content-includer'),          // 插入公共模板
     del = require('del'),                                       // 文件目录清除
     config = require('./config.sftp.js'),                       // sftp 配置文件
+    ftp = require('vinyl-ftp'),                                 // ftp 文件上传
+    gutil = require('gulp-util'),
     newDate = new Date();                                       // 时间戳
 
 // 命令行参数：gulp [任务名] --dir=[页面目录] --type=[pc/mb] --subdir=[ks/tt|tx/bd]
@@ -24,10 +26,11 @@ var dir = argv.dir || "test",
     mbPath = [["lx", "m_lxwedu", "m_qcwxx", "m_yytby", "ks"], ["http://lx.zmnedu.com", "http://zmnedu.lxwedu.com.cn", "http://zmnedu.qcwxx.cn", "http://zmnedu.yytby.com.cn", "http://ks.zmnedu.com"], ["400-888-5185", "400-858-0855", "400-858-0855", "400-858-0855", "400-888-5185"], ["4008885185", "4008580855", "4008580855", "4008580855", "4008885185"]],
     k = pcPath[0].length - 1;
 
-var gulpSsh = new ssh({
-    ignoreErrors: true,
-    sshConfig: config.sftp()
-})
+// var gulpSsh = new ssh({
+//     ignoreErrors: true,
+//     sshConfig: config.sftp()
+// })
+var gulpSsh = ftp.create(config.sftp());
 
 if(dir == 'index_ks' || subdir == 'ks') {
     ksdir = '/ks';
@@ -127,7 +130,7 @@ gulp.task('minify_img', function () {
         redir = dir;
     }
     return gulp.src(inImgPath)
-        .pipe(imagemin())
+        // .pipe(imagemin())
         .pipe(gulp.dest('dist/' + type + ksdir + '/static/' + redir + '/images'));
 });
 
@@ -147,7 +150,7 @@ gulp.task('upload_html', ['minify_html'], function() {
                     .pipe(replace(/href=\"http\:\/\/liuxue\.zmnedu\.com/g, 'href="' + pcPath[1][i]))
                     .pipe(replace(/window\.open\(\"http\:\/\/liuxue\.zmnedu\.com/g, 'window.open("' + pcPath[1][i]))
                     .pipe(replace('400-888-5185', pcPath[2][i]))
-                    .pipe(gulpSsh.dest('/sem/' + pcPath[0][i]));
+                    .pipe(gulpSsh.dest(pcPath[0][i]));
             }
         } else if(dir == "index_ks") {
             for(var i = 0, len = pcPath[0].length - 1; i < len; i++) {
@@ -159,7 +162,7 @@ gulp.task('upload_html', ['minify_html'], function() {
                     .pipe(replace(/href=\"http\:\/\/liuxue\.zmnedu\.com/g, 'href="' + pcPath[1][i]))
                     .pipe(replace(/window\.open\(\"http\:\/\/liuxue\.zmnedu\.com/g, 'window.open("' + pcPath[1][i]))
                     .pipe(replace('400-888-5185', pcPath[2][i]))
-                    .pipe(gulpSsh.dest('/sem/' + pcPath[0][i] + '/ks'));
+                    .pipe(gulpSsh.dest(pcPath[0][i] + '/ks'));
             }
             gulp.src('dist/' + type + '/index/index.html')
                 .pipe(replace('href="/static/common/common_liuxue.css"', 'href="/static/common/common_kaoshi.css"'))
@@ -176,7 +179,7 @@ gulp.task('upload_html', ['minify_html'], function() {
                 .pipe(replace(/href=\"http\:\/\/liuxue\.zmnedu\.com\/ks/g, 'href="' + pcPath[1][k]))
                 .pipe(replace(/window\.open\(\"http\:\/\/liuxue\.zmnedu\.com\/ks/g, 'window.open("' + pcPath[1][k]))
                 .pipe(replace('400-888-5185', pcPath[2][k]))
-                .pipe(gulpSsh.dest('/sem/' + pcPath[0][k]));
+                .pipe(gulpSsh.dest(pcPath[0][k]));
         } else {
             if(subdir == "ks") {
                 for(var i = 0, len = pcPath[0].length - 1; i < len; i++) {
@@ -188,7 +191,7 @@ gulp.task('upload_html', ['minify_html'], function() {
                         .pipe(replace(/href=\"http\:\/\/liuxue\.zmnedu\.com/g, 'href="' + pcPath[1][i]))
                         .pipe(replace(/window\.open\(\"http\:\/\/liuxue\.zmnedu\.com/g, 'window.open("' + pcPath[1][i]))
                         .pipe(replace('400-888-5185', pcPath[2][i]))
-                        .pipe(gulpSsh.dest('/sem/' + pcPath[0][i] + '/ks/' + dir));
+                        .pipe(gulpSsh.dest(pcPath[0][i] + '/ks/' + dir));
                 }
                 gulp.src(outHtmlPath)
                     .pipe(replace('href="/static/common/common_liuxue.css"', 'href="/static/common/common_kaoshi.css"'))
@@ -206,7 +209,7 @@ gulp.task('upload_html', ['minify_html'], function() {
                     .pipe(replace(/href=\"http\:\/\/liuxue\.zmnedu\.com\/ks/g, 'href="' + pcPath[1][k]))
                     .pipe(replace(/window\.open\(\"http\:\/\/liuxue\.zmnedu\.com\/ks/g, 'window.open("' + pcPath[1][k]))
                     .pipe(replace('400-888-5185', pcPath[2][k]))
-                    .pipe(gulpSsh.dest('/sem/' + pcPath[0][k] + '/' + dir));
+                    .pipe(gulpSsh.dest(pcPath[0][k] + '/' + dir));
             } else {
                 for(var i = 0, len = pcPath[0].length - 1; i < len; i++) {
                     gulp.src(outHtmlPath)
@@ -217,7 +220,7 @@ gulp.task('upload_html', ['minify_html'], function() {
                         .pipe(replace(/href=\"http\:\/\/liuxue\.zmnedu\.com/g, 'href="' + pcPath[1][i]))
                         .pipe(replace(/window\.open\(\"http\:\/\/liuxue\.zmnedu\.com/g, 'window.open("' + pcPath[1][i]))
                         .pipe(replace('400-888-5185', pcPath[2][i]))
-                        .pipe(gulpSsh.dest('/sem/' + pcPath[0][i] + '/' + dir));
+                        .pipe(gulpSsh.dest(pcPath[0][i] + '/' + dir));
                 }
             }
         }
@@ -233,7 +236,7 @@ gulp.task('upload_html', ['minify_html'], function() {
                     .pipe(replace(/window\.open\(\"http\:\/\/lx\.zmnedu\.com/g, 'window.open("' + mbPath[1][i]))
                     .pipe(replace('400-888-5185', mbPath[2][i]))
                     .pipe(replace('4008885185', mbPath[3][i]))
-                    .pipe(gulpSsh.dest('/sem/' + mbPath[0][i]));
+                    .pipe(gulpSsh.dest(mbPath[0][i]));
             }
         } else if(dir == 'index_ks') {
             for(var i = 0, len = mbPath[0].length - 1; i < len; i++) {
@@ -246,7 +249,7 @@ gulp.task('upload_html', ['minify_html'], function() {
                     .pipe(replace(/window\.open\(\"http\:\/\/lx\.zmnedu\.com/g, 'window.open("' + mbPath[1][i]))
                     .pipe(replace('400-888-5185', mbPath[2][i]))
                     .pipe(replace('4008885185', mbPath[3][i]))
-                    .pipe(gulpSsh.dest('/sem/' + mbPath[0][i] + '/ks'));
+                    .pipe(gulpSsh.dest(mbPath[0][i] + '/ks'));
             }
             gulp.src('dist/' + type + '/index/index.html')
                 // .pipe(replace(/clicked\'\,\'([^_]*)/g, "clicked" + "','" + mbPath[0][k]))
@@ -265,7 +268,7 @@ gulp.task('upload_html', ['minify_html'], function() {
                 .pipe(replace(/window\.open\(\"http\:\/\/lx\.zmnedu\.com\/ks/g, 'window.open("' + mbPath[1][k]))
                 .pipe(replace('400-888-5185', mbPath[2][k]))
                 .pipe(replace('4008885185', mbPath[3][k]))
-                .pipe(gulpSsh.dest('/sem/' + mbPath[0][k]));
+                .pipe(gulpSsh.dest(mbPath[0][k]));
         } else {
             if(subdir == "ks") {
                 for(var i = 0, len = mbPath[0].length - 1; i < len; i++) {
@@ -278,7 +281,7 @@ gulp.task('upload_html', ['minify_html'], function() {
                         .pipe(replace(/window\.open\(\"http\:\/\/lx\.zmnedu\.com/g, 'window.open("' + mbPath[1][i]))
                         .pipe(replace('400-888-5185', mbPath[2][i]))
                         .pipe(replace('4008885185', mbPath[3][i]))
-                        .pipe(gulpSsh.dest('/sem/' + mbPath[0][i] + '/ks/' + dir));
+                        .pipe(gulpSsh.dest(mbPath[0][i] + '/ks/' + dir));
                 }
                 gulp.src(outHtmlPath)
                     // .pipe(replace(/clicked\'\,\'([^_]*)/g, "clicked" + "','" + mbPath[0][k]))
@@ -300,7 +303,7 @@ gulp.task('upload_html', ['minify_html'], function() {
                     .pipe(replace(/window\.open\(\"http\:\/\/lx\.zmnedu\.com\/ks/g, 'window.open("' + mbPath[1][k]))
                     .pipe(replace('400-888-5185', mbPath[2][k]))
                     .pipe(replace('4008885185', mbPath[3][k]))
-                    .pipe(gulpSsh.dest('/sem/' + mbPath[0][k] + '/' + dir));
+                    .pipe(gulpSsh.dest(mbPath[0][k] + '/' + dir));
             } else if(subdir == "tt" || subdir == "tx") {
                 gulp.src(outHtmlPath)
                     // .pipe(replace(/clicked\'\,\'([^_]*)/g, "clicked" + "','" + mbPath[0][0]))
@@ -311,7 +314,7 @@ gulp.task('upload_html', ['minify_html'], function() {
                     .pipe(replace(/window\.open\(\"http\:\/\/lx\.zmnedu\.com/g, 'window.open("' + mbPath[1][0]))
                     .pipe(replace('400-888-5185', mbPath[2][0]))
                     .pipe(replace('4008885185', mbPath[3][0]))
-                    .pipe(gulpSsh.dest('/sem/' + mbPath[0][0] + '/tt/' + dir)),
+                    .pipe(gulpSsh.dest(mbPath[0][0] + '/tt/' + dir)),
                 gulp.src(outHtmlPath)
                     // .pipe(replace(/clicked\'\,\'([^_]*)/g, "clicked" + "','" + mbPath[0][0]))
                     // .pipe(replace(/clicked\"\,\"([^_]*)/g, 'clicked' + '","' + mbPath[0][0]))
@@ -321,7 +324,7 @@ gulp.task('upload_html', ['minify_html'], function() {
                     .pipe(replace(/window\.open\(\"http\:\/\/lx\.zmnedu\.com/g, 'window.open("' + mbPath[1][0]))
                     .pipe(replace('400-888-5185', mbPath[2][0]))
                     .pipe(replace('4008885185', mbPath[3][0]))
-                    .pipe(gulpSsh.dest('/sem/' + mbPath[0][0] + '/tx/' + dir));
+                    .pipe(gulpSsh.dest(mbPath[0][0] + '/tx/' + dir));
             } else if(subdir == "bd") {
                 gulp.src(outHtmlPath)
                     // .pipe(replace(/clicked\'\,\'([^_]*)/g, "clicked" + "','" + mbPath[0][0]))
@@ -332,7 +335,7 @@ gulp.task('upload_html', ['minify_html'], function() {
                     .pipe(replace(/window\.open\(\"http\:\/\/lx\.zmnedu\.com/g, 'window.open("' + mbPath[1][0]))
                     .pipe(replace('400-888-5185', mbPath[2][0]))
                     .pipe(replace('4008885185', mbPath[3][0]))
-                    .pipe(gulpSsh.dest('/sem/' + mbPath[0][0] + '/bdtt/' + dir));
+                    .pipe(gulpSsh.dest(mbPath[0][0] + '/bdtt/' + dir));
             } else {
                 for(var i = 0, len = mbPath[0].length - 1; i < len; i++) {
                     gulp.src(outHtmlPath)
@@ -344,7 +347,7 @@ gulp.task('upload_html', ['minify_html'], function() {
                         .pipe(replace(/window\.open\(\"http\:\/\/lx\.zmnedu\.com/g, 'window.open("' + mbPath[1][i]))
                         .pipe(replace('400-888-5185', mbPath[2][i]))
                         .pipe(replace('4008885185', mbPath[3][i]))
-                        .pipe(gulpSsh.dest('/sem/' + mbPath[0][i] + '/' + dir));
+                        .pipe(gulpSsh.dest(mbPath[0][i] + '/' + dir));
                 }
             }
         }
@@ -363,31 +366,31 @@ gulp.task('upload_css', ['minify_css'], function() {
         if(subdir == "ks") {
             for(var i = 0, len = pcPath[0].length - 1; i < len; i++) {
                 gulp.src(outCssPath)
-                    .pipe(gulpSsh.dest('/sem/' + pcPath[0][i] + '/ks/static/' + redir));
+                    .pipe(gulpSsh.dest(pcPath[0][i] + '/ks/static/' + redir));
             }
             gulp.src(outCssPath)
-                .pipe(gulpSsh.dest('/sem/' + pcPath[0][k] + '/static/' + redir));
+                .pipe(gulpSsh.dest(pcPath[0][k] + '/static/' + redir));
         } else {
             for(var i = 0, len = pcPath[0].length - 1; i < len; i++) {
                 gulp.src(outCssPath)
-                    .pipe(gulpSsh.dest('/sem/' + pcPath[0][i] + '/static/' + redir));
+                    .pipe(gulpSsh.dest(pcPath[0][i] + '/static/' + redir));
             }
         }
     } else if(type == "mb"){
         if(subdir == "ks") {
             for(var i = 0, len = mbPath[0].length - 1; i < len; i++) {
                 gulp.src(outCssPath)
-                    .pipe(gulpSsh.dest('/sem/' + mbPath[0][i] + '/ks/static/' + redir));
+                    .pipe(gulpSsh.dest(mbPath[0][i] + '/ks/static/' + redir));
             }
             gulp.src(outCssPath)
-                .pipe(gulpSsh.dest('/sem/' + mbPath[0][k] + '/static/' + redir));
+                .pipe(gulpSsh.dest(mbPath[0][k] + '/static/' + redir));
         } else if(subdir == "tt" || subdir == "tx" || subdir == "bd") {
             gulp.src(outCssPath)
-                .pipe(gulpSsh.dest('/sem/' + mbPath[0][0] + '/static/' + redir));
+                .pipe(gulpSsh.dest(mbPath[0][0] + '/static/' + redir));
         } else {
             for(var i = 0, len = mbPath[0].length - 1; i < len; i++) {
                 gulp.src(outCssPath)
-                    .pipe(gulpSsh.dest('/sem/' + mbPath[0][i] + '/static/' + redir));
+                    .pipe(gulpSsh.dest(mbPath[0][i] + '/static/' + redir));
             }
         }
     }
@@ -405,31 +408,31 @@ gulp.task('upload_js', ['minify_js'], function() {
         if(subdir == "ks") {
             for(var i = 0, len = pcPath[0].length - 1; i < len; i++) {
                 gulp.src(outJsPath)
-                    .pipe(gulpSsh.dest('/sem/' + pcPath[0][i] + '/ks/static/' + redir));
+                    .pipe(gulpSsh.dest(pcPath[0][i] + '/ks/static/' + redir));
             }
             gulp.src(outJsPath)
-                .pipe(gulpSsh.dest('/sem/' + pcPath[0][k] + '/static/' + redir));
+                .pipe(gulpSsh.dest(pcPath[0][k] + '/static/' + redir));
         } else {
             for(var i = 0, len = pcPath[0].length - 1; i < len; i++) {
                 gulp.src(outJsPath)
-                    .pipe(gulpSsh.dest('/sem/' + pcPath[0][i] + '/static/' + redir));
+                    .pipe(gulpSsh.dest(pcPath[0][i] + '/static/' + redir));
             }
         }
     } else if(type == "mb"){
         if(subdir == "ks") {
             for(var i = 0, len = mbPath[0].length - 1; i < len; i++) {
                 gulp.src(outJsPath)
-                    .pipe(gulpSsh.dest('/sem/' + mbPath[0][i] + '/ks/static/' + redir));
+                    .pipe(gulpSsh.dest(mbPath[0][i] + '/ks/static/' + redir));
             }
             gulp.src(outJsPath)
-                .pipe(gulpSsh.dest('/sem/' + mbPath[0][k] + '/static/' + redir));
+                .pipe(gulpSsh.dest(mbPath[0][k] + '/static/' + redir));
         } else if(subdir == "tt" || subdir == "tx" || subdir == "bd") {
             gulp.src(outJsPath)
-                .pipe(gulpSsh.dest('/sem/' + mbPath[0][0] + '/static/' + redir));
+                .pipe(gulpSsh.dest(mbPath[0][0] + '/static/' + redir));
         } else {
             for(var i = 0, len = mbPath[0].length - 1; i < len; i++) {
                 gulp.src(outJsPath)
-                    .pipe(gulpSsh.dest('/sem/' + mbPath[0][i] + '/static/' + redir));
+                    .pipe(gulpSsh.dest(mbPath[0][i] + '/static/' + redir));
             }
         }
     }
@@ -447,31 +450,31 @@ gulp.task('upload_img', ['minify_img'], function() {
         if(subdir == "ks") {
             for(var i = 0, len = pcPath[0].length - 1; i < len; i++) {
                 gulp.src(outImgPath)
-                    .pipe(gulpSsh.dest('/sem/' + pcPath[0][i] + '/ks/static/' + redir + '/images'));
+                    .pipe(gulpSsh.dest(pcPath[0][i] + '/ks/static/' + redir + '/images'));
             }
             gulp.src(outImgPath)
-                .pipe(gulpSsh.dest('/sem/' + pcPath[0][k] + '/static/' + redir + '/images'));
+                .pipe(gulpSsh.dest(pcPath[0][k] + '/static/' + redir + '/images'));
         } else {
             for(var i = 0, len = pcPath[0].length - 1; i < len; i++) {
                 gulp.src(outImgPath)
-                    .pipe(gulpSsh.dest('/sem/' + pcPath[0][i] + '/static/' + redir + '/images'));
+                    .pipe(gulpSsh.dest(pcPath[0][i] + '/static/' + redir + '/images'));
             }
         }
     } else if(type == "mb"){
         if(subdir == "ks") {
             for(var i = 0, len = mbPath[0].length - 1; i < len; i++) {
                 gulp.src(outImgPath)
-                    .pipe(gulpSsh.dest('/sem/' + mbPath[0][i] + '/ks/static/' + redir + '/images'));
+                    .pipe(gulpSsh.dest(mbPath[0][i] + '/ks/static/' + redir + '/images'));
             }
             gulp.src(outImgPath)
-                .pipe(gulpSsh.dest('/sem/' + mbPath[0][k] + '/static/' + redir + '/images'));
+                .pipe(gulpSsh.dest(mbPath[0][k] + '/static/' + redir + '/images'));
         } else if(subdir == "tt" || subdir == "tx" || subdir == "bd") {
             gulp.src(outImgPath)
-                .pipe(gulpSsh.dest('/sem/' + mbPath[0][0] + '/static/' + redir + '/images'));
+                .pipe(gulpSsh.dest(mbPath[0][0] + '/static/' + redir + '/images'));
         } else {
             for(var i = 0, len = mbPath[0].length - 1; i < len; i++) {
                 gulp.src(outImgPath)
-                    .pipe(gulpSsh.dest('/sem/' + mbPath[0][i] + '/static/' + redir + '/images'));
+                    .pipe(gulpSsh.dest(mbPath[0][i] + '/static/' + redir + '/images'));
             }
         }
     }
@@ -494,5 +497,5 @@ gulp.task('upload_dev', function() {
     }
     var devPath = 'src/' + type + '/' + dir + '/**';
     gulp.src(devPath)
-        .pipe(gulpSsh.dest('/sem/sem_test/dev/' + type + '/' + subdir + dir + newDate.format("yyyyMMdd")));
+        .pipe(gulpSsh.dest('/sem_test/dev/' + type + '/' + subdir + dir + newDate.format("yyyyMMdd")));
 });

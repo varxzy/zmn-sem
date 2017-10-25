@@ -50,14 +50,14 @@ config.sftp.js
 
 ```javascript
 var config = {};
-function sftpConfig() {
+function ftpConfig() {
     return config = {
         host: "127.0.0.1",
-        username: "name",
-        password: "pass",
-        port: 22
+        user: "name",
+        pass: "pass",
+        port: 21
     }
 }
 
-exports.sftp = sftpConfig;
+exports.sftp = ftpConfig;
 ```

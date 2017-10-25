@@ -79,7 +79,7 @@ gulp.task('minify_html', function() {
         .pipe(replace(/<!\-\-\s+build\:/g, '!-- build:'))
         .pipe(replace(/<!\-\-\s+endbuild/g, '!-- endbuild'))
         .pipe(replace(/<!\-\-#include\s+virtual="/g, '!--#include virtual="'))
-        .pipe(htmlmin(options))
+        .pipe(htmlmin())
         .pipe(replace(/!\-\-\s+build\:/g, '<!-- build:'))
         .pipe(replace(/!\-\-\s+endbuild/g, '<!-- endbuild'))
         .pipe(replace(/!\-\-#include\s+virtual="/g, '<!--#include virtual="'))
